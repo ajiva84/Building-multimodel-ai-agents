@@ -1,0 +1,13 @@
+[Unit]
+Description=Agent worker
+After=network.target
+
+[Service]
+ExecStart=/opt/agent/venv/bin/python /opt/agent/worker.py
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/agent/secrets.env
+User=agent
+
+[Install]
+WantedBy=multi-user.target

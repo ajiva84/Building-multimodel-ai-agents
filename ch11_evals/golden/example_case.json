@@ -1,0 +1,10 @@
+{
+  "id": "inv-017",
+  "input": "...raw invoice text...",
+  "expect": {
+    "vendor": "Al Madina Trading",
+    "total": 4820.5,
+    "must_flag": false
+  },
+  "notes": "Footer-style totals \u2014 the format that broke v2"
+}

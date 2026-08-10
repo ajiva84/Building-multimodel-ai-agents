@@ -1,0 +1,6 @@
+anthropic
+google-genai
+chromadb
+fastapi
+uvicorn
+"mcp[cli]"
