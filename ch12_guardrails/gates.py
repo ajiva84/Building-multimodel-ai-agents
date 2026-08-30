@@ -22,11 +22,11 @@ def gated_execute(registry, name: str, args: dict, ctx) -> str:
         return deny("rate_limited", f"{name} hit {LIMITS.get(name)}")
     # 3. Domain rules: recompute, don't trust
     if name == "send_telegram_alert":
-        score = ctx.recompute_zone_score(args)
-        if score < 7.0:
-            return deny("below_threshold", f"recomputed score {score}")
-        if not ctx.session_window_active():
-            return deny("outside_session", "no active session window")
+        fare = ctx.fetch_fare_now(args["route"], args["cabin"])   # re-fetch
+        if fare > args["target_price"]:
+            return deny("above_target", f"live fare {fare} > target")
+        if not ctx.seats_available(args["route"]):
+            return deny("no_seats", "fare listed but no seats bookable")
     # 4. Irreversible -> human
     if name in IRREVERSIBLE:
         return ctx.queue_for_approval(name, args)

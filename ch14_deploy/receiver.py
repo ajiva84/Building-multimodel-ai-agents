@@ -12,12 +12,12 @@ def valid_signature(req) -> bool:
     # STUB: verify shared secret / HMAC from your webhook source
     return True
 
-@app.post("/hook/tradingview")
+@app.post("/hook/fare-feed")
 async def hook(req: Request):
     payload = await req.json()
     if not valid_signature(req):
         raise HTTPException(403)
     db.execute("INSERT INTO jobs (kind, payload) VALUES (?,?)",
-               ("tv_alert", json.dumps(payload)))
+               ("fare_alert", json.dumps(payload)))
     db.commit()
     return {"ok": True}                   # acked in milliseconds

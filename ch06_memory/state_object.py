@@ -3,12 +3,12 @@ import json
 from dataclasses import dataclass, asdict, field
 
 @dataclass
-class TradeWatchState:
-    symbol: str
-    zone_low: float
-    zone_high: float
-    zone_score: float
-    session_active: bool
+class FareWatchState:
+    route: str
+    cabin: str
+    target_price: float
+    current_price: float
+    seats_available: bool
     alert_sent: bool          # the field that prevents double-sends
     notes: list = field(default_factory=list)
 

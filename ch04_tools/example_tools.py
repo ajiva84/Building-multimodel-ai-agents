@@ -3,29 +3,32 @@ import json
 from registry import ToolRegistry
 
 registry = ToolRegistry()
-SUPPORTED = {"EURUSD", "GBPUSD", "XAUUSD", "USDJPY"}
+AIRPORTS = {"LHR", "JFK", "DXB", "SIN", "IAH"}
 
 @registry.register
-def get_ohlc(symbol: str, timeframe: str) -> str:
-    """Get OHLC candles for a forex pair. Use before any zone analysis.
-    Supported symbols: EURUSD, GBPUSD, XAUUSD, USDJPY.
-    Supported timeframes: M15, H1, H4, D1."""
-    if symbol not in SUPPORTED:
+def get_fare(route: str, cabin: str) -> str:
+    """Get the current lowest fare for a route. Call this before every
+    comparison — never reuse a fare from earlier in the conversation.
+    Route format: 'LHR-JFK'. Cabin: economy, premium, or business.
+    Supported airports: LHR, JFK, DXB, SIN, IAH."""
+    origin, _, dest = route.partition("-")
+    unknown = [a for a in (origin, dest) if a not in AIRPORTS]
+    if unknown:
         return json.dumps({
-            "error": "unsupported_symbol",
-            "message": f"'{symbol}' is not supported.",
-            "supported_symbols": sorted(SUPPORTED),   # the fix, handed over
+            "error": "unknown_airport",
+            "message": f"{unknown} not recognized.",
+            "supported_airports": sorted(AIRPORTS),   # the fix, handed over
         })
-    # STUB: real data fetch goes here
-    return json.dumps({"symbol": symbol, "timeframe": timeframe,
-                       "candles": [{"o": 1.084, "h": 1.087,
-                                    "l": 1.083, "c": 1.086}]})
+    # STUB: real fare lookup goes here
+    return json.dumps({"route": route, "cabin": cabin,
+                       "fare": 412, "currency": "USD"})
 
 @registry.register
 def send_telegram_alert(message: str) -> str:
-    """Send a trade alert to the Telegram channel.
-    Use ONLY for setups with zone_score >= 7.0 during an active session
-    window. Do NOT use for journaling, questions, or sub-threshold setups —
-    use log_to_journal for those. Sends immediately and cannot be recalled."""
+    """Send a fare alert to the Telegram channel.
+    Use ONLY when the fare is at or below the user's target price AND
+    seats are still available. For prices above target, or to record a
+    price history point, use log_price instead.
+    Sends immediately and cannot be recalled."""
     # STUB: real Telegram sendMessage call goes here
     return json.dumps({"sent": True})

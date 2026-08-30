@@ -37,4 +37,4 @@ or in `secrets.env` (which is git-ignored — never commit real keys).
 Where the book shows `...` the code here keeps a clearly-marked stub with a
 comment, so files run or fail loudly rather than pretending. Each folder's
 code matches its chapter's listings; fill stubs with your own domain logic
-(the book's examples use forex trading and retail operations).
+(the book's examples use flight-price watching and retail operations).

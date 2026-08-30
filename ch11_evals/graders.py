@@ -8,7 +8,7 @@ def grade_trajectory(run: dict) -> list:
     if run["cost"] > 0.25:
         problems.append(f"expensive: ${run['cost']:.2f}")
     tools_used = [e["tool"] for e in run["log"]]
-    if "get_ohlc" not in tools_used:
+    if "get_fare" not in tools_used:
         problems.append("answered without fetching data")   # the scary one
     calls = [(e["tool"], json.dumps(e["args"], sort_keys=True))
              for e in run["log"]]
